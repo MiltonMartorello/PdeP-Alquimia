@@ -5,6 +5,8 @@
  * bomba: la mitad del daño
  * pocion: su poder curativo mas 10 puntos extras por cada material mistico que contiene
  * debilitador: un valor por defecto de 5 salvo que contenga algun material mistico en cuyo caso el valor pasa a ser 12 por cada material
+ *  4 Saber si es profesional, esto se cumple si la calidad promedio de todos sus items es mayor a 50, todos sus items de combate sos 
+ * efectivos y es buen explorador.
 */
 
 object alquimista {
@@ -23,11 +25,11 @@ object alquimista {
 		return itemsDeCombate.count({itemDeCombate => itemDeCombate.esEfectivo()})
 	}
 	
-	method esBuenExplorador (){
+	method esBuenExplorador(){
 		return itemsDeRecoleccion.size() >= 3
 	}
 	
-	method capacidadOfensiva (){
+	method capacidadOfensiva(){
 		return self.capacidadOfensivaDeItemsDeCombate().sum()
 	}
 	
@@ -35,10 +37,14 @@ object alquimista {
 		return itemsDeCombate.map(){item => item.capacidadOfensiva()}
 	}
 	
+	method esProfesional(){
+		
+	}
 }
 
 object bomba {
 	var danio = 15
+	var materiales = []
 	
 	method esEfectivo(){
 		return danio > 100
@@ -47,11 +53,16 @@ object bomba {
 	method capacidadOfensiva(){
 		return danio / 2
 	}
+	
+	method calidad(){
+	return materiales.min{material => material.calidad()}
+	}
 }
 
 
 object pocion {
 	var poderCurativo = 20
+	var materiales = []
 	
 	method esEfectivo (){
 		return poderCurativo > 50 && self.creadaConMaterialMistico()
@@ -68,10 +79,15 @@ object pocion {
 	method cadaMaterialMistico(){ // incompleto por ahora devuelve 2
 		return 2
 	}
+	
+	method calidad(){
+		return materiales.findOrElse({material => material.esMistico()},{material => material.head()}).calidad()
+	}
 }
 
 object debilitador {
 	var debilitamientos = []
+	var materiales = []
 	
 	method esEfectivo(){
 		return (self.infringeAlgunDecrecimiento() and self.creadaConMaterialMistico().negate())
@@ -94,6 +110,10 @@ object debilitador {
 		
 	method cadaMaterialMistico(){ // incompleto por ahora devuelve 2
 		return 2
+	}
+	
+	method calidad(){
+		return materiales.sortedBy{materiales.min()}.take(2)
 	}
 }
 
