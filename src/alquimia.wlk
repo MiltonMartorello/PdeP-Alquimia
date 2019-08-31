@@ -25,6 +25,10 @@ object alquimista {
 		return itemsDeCombate.count({itemDeCombate => itemDeCombate.esEfectivo()})
 	}
 	
+	method cantidadItemsDeRecoleccion(){
+		return itemsDeRecoleccion.size()
+	}
+	
 	method esBuenExplorador(){
 		return itemsDeRecoleccion.size() >= 3
 	}
@@ -51,6 +55,10 @@ object alquimista {
 	
 	method calidadDeItemsDeRecoleccion(){
 		return itemsDeRecoleccion.map(){item => item.calidad()}.sum()
+	}
+	
+	method cantidadDeItems(){
+		return self.cantidadItemsDeRecoleccion() + self.cantidadItemsDeCombate()
 	}
 }
 
@@ -139,6 +147,10 @@ object canaDePesca {
 	method calidad(){
 		return 30 + self.calidadDeLosMateriales() / 10
 	}
+	
+	method calidadDeLosMateriales() {
+		return 10
+	}
 }
 
 object red {
@@ -146,12 +158,21 @@ object red {
 	
 	method calidad(){
 		return 30 + self.calidadDeLosMateriales() / 10
+	}
+	
+	method calidadDeLosMateriales() {
+		return 10
+	}
 }
 
 object BolsaDeViento{
 	var materiales =[]
-	
-	}
+
 	method calidad(){
 		return 30 + self.calidadDeLosMateriales() / 10
+	}
+	method calidadDeLosMateriales() {
+		return 10
+	}
+
 }
