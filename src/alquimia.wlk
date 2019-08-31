@@ -38,7 +38,19 @@ object alquimista {
 	}
 	
 	method esProfesional(){
-		
+		return self.calidadPromedioDeSusItems > 50 and self.todosSusItemsSonEfectivos() and self.esBuenExplorador()
+	}
+	
+	method calidadPromedioDeSusItems(){
+		return (self.calidadDeItemsCombativos() + self.calidadDeItemsDeRecoleccion()) / self.cantidadDeItems()
+	}
+	
+	method calidadDeItemsCombativos(){
+		return itemsDeCombate.map(){item => item.calidad()}.sum()
+	}
+	
+	method calidadDeItemsDeRecoleccion(){
+		return itemsDeRecoleccion.map(){item => item.calidad()}.sum()
 	}
 }
 
@@ -103,7 +115,7 @@ object debilitador {
 	
 	method capacidadOfensiva(){
 		if self.creadaConMaterialMistico(){
-			return 12 * cadaMaterialMistico()
+			return 12 * self.cadaMaterialMistico()
 		}
 		return 5
 	}
@@ -113,7 +125,33 @@ object debilitador {
 	}
 	
 	method calidad(){
-		return materiales.sortedBy{materiales.min()}.take(2)
+		return (self.materialesOrdenadosDeMenorAMayor()).take(2)
+	}
+	
+	method materialesOrdenadosDeMenorAMayor() {
+		return materiales.sortedBy{materiales.min()}
 	}
 }
 
+object canaDePesca {
+	var materiales =[]
+	
+	method calidad(){
+		return 30 + self.calidadDeLosMateriales() / 10
+	}
+}
+
+object red {
+	var materiales =[]
+	
+	method calidad(){
+		return 30 + self.calidadDeLosMateriales() / 10
+}
+
+object BolsaDeViento{
+	var materiales =[]
+	
+	}
+	method calidad(){
+		return 30 + self.calidadDeLosMateriales() / 10
+}
