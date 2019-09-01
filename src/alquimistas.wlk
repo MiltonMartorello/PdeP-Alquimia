@@ -38,11 +38,11 @@ object alquimista {
 	}
 	
 	method capacidadOfensivaDeItemsDeCombate(){
-		return itemsDeCombate.map(){item => item.capacidadOfensiva()}
+		return itemsDeCombate.map({item => item.capacidadOfensiva()})
 	}
 	
 	method esProfesional(){
-		return self.calidadPromedioDeSusItems > 50 and self.todosSusItemsSonEfectivos() and self.esBuenExplorador()
+		return self.calidadPromedioDeSusItems() > 50 and self.todosSusItemsSonEfectivos() and self.esBuenExplorador()
 	}
 	
 	method calidadPromedioDeSusItems(){
@@ -50,15 +50,27 @@ object alquimista {
 	}
 	
 	method calidadDeItemsCombativos(){
-		return itemsDeCombate.map(){item => item.calidad()}.sum()
+		return itemsDeCombate.map{item => item.calidad()}.sum()
 	}
 	
 	method calidadDeItemsDeRecoleccion(){
-		return itemsDeRecoleccion.map(){item => item.calidad()}.sum()
+		return itemsDeRecoleccion.map{item => item.calidad()}.sum()
 	}
 	
 	method cantidadDeItems(){
 		return self.cantidadItemsDeRecoleccion() + self.cantidadItemsDeCombate()
+	}
+	
+	method todosSusItemsSonEfectivos(){
+		return self.todosLosItemsDeRecoleccionSonEfectivos() and self.todosLositemsDeCombateSonEfectivos()
+	}
+	
+	method todosLosItemsDeRecoleccionSonEfectivos(){
+		return itemsDeRecoleccion.all({item => item.esEfectivo()})
+	}
+	
+	method todosLositemsDeCombateSonEfectivos(){
+		return itemsDeCombate.all{item => item.esEfectivo()}
 	}
 }
 
@@ -93,7 +105,7 @@ object pocion {
 	}
 	
 	method capacidadOfensiva(){
-		return poderCurativo + 10 * cadaMaterialMistico()
+		return poderCurativo + 10 * self.cadaMaterialMistico()
 	}	
 	
 	method cadaMaterialMistico(){ // incompleto por ahora devuelve 2
@@ -122,7 +134,7 @@ object debilitador {
 	}
 	
 	method capacidadOfensiva(){
-		if self.creadaConMaterialMistico(){
+		if (self.creadaConMaterialMistico()){
 			return 12 * self.cadaMaterialMistico()
 		}
 		return 5
@@ -151,6 +163,10 @@ object canaDePesca {
 	method calidadDeLosMateriales() {
 		return 10
 	}
+	
+	method esEfectivo(){
+		return true
+	}
 }
 
 object red {
@@ -163,16 +179,25 @@ object red {
 	method calidadDeLosMateriales() {
 		return 10
 	}
+	
+	method esEfectivo(){
+		return true
+	}
 }
 
-object BolsaDeViento{
+object bolsaDeViento{
 	var materiales =[]
 
 	method calidad(){
 		return 30 + self.calidadDeLosMateriales() / 10
 	}
+	
 	method calidadDeLosMateriales() {
 		return 10
+	}
+	
+	method esEfectivo(){
+		return true
 	}
 
 }
