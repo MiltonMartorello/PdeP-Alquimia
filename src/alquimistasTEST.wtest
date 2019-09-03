@@ -1,27 +1,133 @@
 import alquimistas.*
 
+describe "Test Alquimistas"{
+
+fixture{
+	
+//	alquimista.quitaritemDeCombate(bomba) // Efectivo
+//	alquimista.quitaritemDeCombate(debilitador) // No efectivo
+}
+
 //Ejercicio 1
 
 test "Un alquimista tiene criterio. Se cumple si la mitad de sus items de combate son efectivos" {
-
+	
+	alquimista.quitaritemDeCombate(pocion) // No efectiva
 	assert.that(alquimista.tieneCriterio())
 	
 }
 
 test "Un alquimista NO tiene criterio. Si la mitad de sus items de combate no son efectivos" {
-
+	
 	assert.notThat(alquimista.tieneCriterio())
 	
+}
+
+test "Bomba es efectiva"{
+	
+	assert.that(bomba.esEfectivo())
+}
+
+test "Bomba No es efectiva"{
+	
+	bomba.cambiarDanio(15)
+	assert.notThat(bomba.esEfectivo())
+}
+
+test "Pocion es Efectiva"{
+
+	pocion.cambiarPoderCurativo(51)
+	assert.that(pocion.esEfectivo())
+
+}
+
+test "Pocion NO es Efectiva"{
+	
+	assert.notThat(pocion.esEfectivo())
+}
+
+test "Debilitador es Efectivo"{
+	
+	debilitador.quitarMaterial(uni)
+	assert.that(debilitador.esEfectivo())
+}
+
+test "Debilitador No es efectivo"{
+	
+	assert.notThat(debilitador.esEfectivo())
 }
 
 //Ejercicio 2
 
 test "Un alquimista es buen explorador si posee al menos 3 items de recoleccion distintos" {
 	
+	alquimista.agregarItemDeRecoleccion(canaDePesca)
+	alquimista.agregarItemDeRecoleccion(red)
+	alquimista.agregarItemDeRecoleccion(bolsaDeViento)
 	assert.that(alquimista.esBuenExplorador())
 }
 
 test "Un alquimista NO es buen explorador si posee menos de 3 items de recoleccion distintos" {
 	
-	assert.that(alquimista.esBuenExplorador())
+	assert.notThat(alquimista.esBuenExplorador())
+}
+
+//Ejercicio 3
+
+test "Capacidad Ofensiva de un alquimista es 129" {
+	
+	assert.equals(129, alquimista.capacidadOfensiva())
+}
+
+test "Capacidad ofensiva de un alquimista es distinta de 129"{
+
+	alquimista.quitaritemDeCombate(bomba) // si le quito la bomba la capacidad ofensiva decrece
+	assert.notEquals(129, alquimista.capacidadOfensiva())
+}
+
+test "Daño de la bomba es 150"{
+	
+	assert.equals(150, bomba.danio())
+}
+
+test "La capacidad ofensiva de la bomba es de 75"{
+
+	assert.equals(75, bomba.capacidadOfensiva())
+}
+
+test "La capacidad ofensiva de la bomba es distinta de 75"{
+	
+	bomba.cambiarDanio(15) // deberia dejar de ser efectivo con esto tambien
+	assert.notEquals(75,bomba.capacidadOfensiva())
+	
+}
+test "El poder curativo de la pocion es de 20"{
+	
+	assert.equals(20, pocion.poderCurativo())
+}
+
+test "La capacidad ofensiva de la pocion es de 30"{
+	
+	assert.equals(30,pocion.capacidadOfensiva())
+	
+}
+test "La capacidad ofensiva de la pocion es distinta de 30"{
+
+	pocion.cambiarPoderCurativo(10) // deberia dar menor a 30 con esto
+	assert.notEquals(30, pocion.capacidadOfensiva())
+}
+
+test "La capacidad ofensiva del debilitador es de 24"{
+	
+	assert.equals(24,debilitador.capacidadOfensiva())
+}
+
+test "La capacidad ofensiva del debilitador es distinta de 24"{
+	
+	debilitador.quitarMaterial(uni) // el material mistico
+	assert.notEquals(24, debilitador.capacidadOfensiva())
+}
+
+//Ejercicio 4
+
 }

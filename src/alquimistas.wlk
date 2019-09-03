@@ -10,7 +10,7 @@
 */
 
 object alquimista {
-	var itemsDeCombate = []
+	var itemsDeCombate = [bomba, pocion, debilitador]
 	var itemsDeRecoleccion = []
 	
 	method tieneCriterio(){
@@ -19,6 +19,10 @@ object alquimista {
 	
 	method cantidadItemsDeCombate(){
 		return itemsDeCombate.size()
+	}
+	
+	method quitaritemDeCombate(unItem){
+		itemsDeCombate.remove(unItem)
 	}
 	
 	method cantidadDeItemsDeCombateEfectivos(){
@@ -37,37 +41,41 @@ object alquimista {
 		return self.capacidadOfensivaDeItemsDeCombate().sum()
 	}
 	
-	method capacidadOfensivaDeItemsDeCombate(){
-		return itemsDeCombate.map({item => item.capacidadOfensiva()})
-	}
+		method capacidadOfensivaDeItemsDeCombate(){
+			return itemsDeCombate.map({item => item.capacidadOfensiva()})
+		}
 	
 	method esProfesional(){
 		return self.calidadPromedioDeSusItems() > 50 and self.todosLositemsDeCombateSonEfectivos() and self.esBuenExplorador()
 	}
 	
-	method calidadPromedioDeSusItems(){
-		return (self.calidadDeItemsCombativos() + self.calidadDeItemsDeRecoleccion()) / self.cantidadDeItems()
-	}
+		method calidadPromedioDeSusItems(){
+			return (self.calidadDeItemsCombativos() + self.calidadDeItemsDeRecoleccion()) / self.cantidadDeItems()
+		}
 	
-	method calidadDeItemsCombativos(){
-		return itemsDeCombate.map{item => item.calidad()}.sum()
-	}
+			method calidadDeItemsCombativos(){
+				return itemsDeCombate.map{item => item.calidad()}.sum()
+			}
 	
-	method calidadDeItemsDeRecoleccion(){
-		return itemsDeRecoleccion.map{item => item.calidad()}.sum()
-	}
-	
-	method cantidadDeItems(){
-		return self.cantidadItemsDeRecoleccion() + self.cantidadItemsDeCombate()
-	}
-	
-	method todosLositemsDeCombateSonEfectivos(){
-		return itemsDeCombate.all{item => item.esEfectivo()}
+			method calidadDeItemsDeRecoleccion(){
+				return itemsDeRecoleccion.map{item => item.calidad()}.sum()
+			}
+			
+			method cantidadDeItems(){
+				return self.cantidadItemsDeRecoleccion() + self.cantidadItemsDeCombate()
+			}
+			
+		method todosLositemsDeCombateSonEfectivos(){
+			return itemsDeCombate.all{item => item.esEfectivo()}
+		}
+		
+	method agregarItemDeRecoleccion(unItem){
+		itemsDeRecoleccion.add(unItem)
 	}
 }
 
 object bomba {
-	var danio = 15
+	var danio = 150
 	var materiales = [florRoja,uni]
 	
 	method esEfectivo(){
@@ -79,7 +87,15 @@ object bomba {
 	}
 	
 	method calidad(){
-	return materiales.min{material => material.calidad()}
+		return materiales.min{material => material.calidad()}
+	}
+	
+	method danio(){
+		return danio
+	}
+	
+	method cambiarDanio(unDanio){
+		danio = unDanio 
 	}
 }
 
@@ -92,33 +108,42 @@ object pocion {
 		return poderCurativo > 50 && self.creadaConMaterialMistico()
 	}
 	
-	method creadaConMaterialMistico(){ // true hasta que la justicia demuestre lo contrario
-		return materiales.any{material => material.esMistico()}
-	}
+		method creadaConMaterialMistico(){ // true hasta que la justicia demuestre lo contrario
+			return materiales.any{material => material.esMistico()}
+		}
 	
 	method capacidadOfensiva(){
 		return poderCurativo + 10 * self.cadaMaterialMistico()
 	}	
 	
-	method cadaMaterialMistico(){ // incompleto por ahora devuelve 2
-		return materiales.count{material => material.esMistico()}
-	}
+		method cadaMaterialMistico(){ // incompleto por ahora devuelve 2
+			return materiales.count{material => material.esMistico()}
+		}
 	
 	method calidad(){
 		return materiales.findOrElse({material => material.esMistico()},{material => material.head()}).calidad()
 	}
+	
+	method poderCurativo(){
+		return poderCurativo
+	}
+	
+	method cambiarPoderCurativo(unPoder){
+		poderCurativo = unPoder
+	}	
+
 }
 
 object debilitador {
 	var debilitamientos = []
-	var materiales = []
+	var materiales = [florRoja, uni]
 	
 	method esEfectivo(){
 		return (self.infringeAlgunDecrecimiento() and self.creadaConMaterialMistico().negate())
 	}
 	
 	method creadaConMaterialMistico(){ // true hasta que la justicia demuestre lo contrario
-		return true
+		return materiales.any{material => material.esMistico()}
 	}
 	
 	method infringeAlgunDecrecimiento(){
@@ -143,6 +168,18 @@ object debilitador {
 	method materialesOrdenadosDeMenorAMayor() {
 		return materiales.sortedBy{materiales.min()}
 	}
+	
+	method debilitamientos(){
+		return debilitamientos
+	}
+	
+	method materiales(){
+		return materiales
+	}
+	
+	method quitarMaterial(unMaterial){
+		materiales.remove(unMaterial)
+		}
 }
 
 object canaDePesca {
