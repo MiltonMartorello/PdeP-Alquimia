@@ -42,7 +42,7 @@ object alquimista {
 	}
 	
 	method esProfesional(){
-		return self.calidadPromedioDeSusItems() > 50 and self.todosSusItemsSonEfectivos() and self.esBuenExplorador()
+		return self.calidadPromedioDeSusItems() > 50 and self.todosLositemsDeCombateSonEfectivos() and self.esBuenExplorador()
 	}
 	
 	method calidadPromedioDeSusItems(){
@@ -61,14 +61,6 @@ object alquimista {
 		return self.cantidadItemsDeRecoleccion() + self.cantidadItemsDeCombate()
 	}
 	
-	method todosSusItemsSonEfectivos(){
-		return self.todosLosItemsDeRecoleccionSonEfectivos() and self.todosLositemsDeCombateSonEfectivos()
-	}
-	
-	method todosLosItemsDeRecoleccionSonEfectivos(){
-		return itemsDeRecoleccion.all({item => item.esEfectivo()})
-	}
-	
 	method todosLositemsDeCombateSonEfectivos(){
 		return itemsDeCombate.all{item => item.esEfectivo()}
 	}
@@ -76,7 +68,7 @@ object alquimista {
 
 object bomba {
 	var danio = 15
-	var materiales = []
+	var materiales = [florRoja,uni]
 	
 	method esEfectivo(){
 		return danio > 100
@@ -94,14 +86,14 @@ object bomba {
 
 object pocion {
 	var poderCurativo = 20
-	var materiales = []
+	var materiales = [florRoja, uni]
 	
 	method esEfectivo (){
 		return poderCurativo > 50 && self.creadaConMaterialMistico()
 	}
 	
 	method creadaConMaterialMistico(){ // true hasta que la justicia demuestre lo contrario
-		return true
+		return materiales.any{material => material.esMistico()}
 	}
 	
 	method capacidadOfensiva(){
@@ -109,7 +101,7 @@ object pocion {
 	}	
 	
 	method cadaMaterialMistico(){ // incompleto por ahora devuelve 2
-		return 2
+		return materiales.count{material => material.esMistico()}
 	}
 	
 	method calidad(){
@@ -163,10 +155,6 @@ object canaDePesca {
 	method calidadDeLosMateriales() {
 		return 10
 	}
-	
-	method esEfectivo(){
-		return true
-	}
 }
 
 object red {
@@ -178,10 +166,6 @@ object red {
 	
 	method calidadDeLosMateriales() {
 		return 10
-	}
-	
-	method esEfectivo(){
-		return true
 	}
 }
 
@@ -195,9 +179,30 @@ object bolsaDeViento{
 	method calidadDeLosMateriales() {
 		return 10
 	}
-	
-	method esEfectivo(){
-		return true
-	}
+}
 
+object florRoja{
+	var calidad = 20
+	var mistico = false
+	
+	method esMistico(){
+		return mistico 
+	}
+		
+	method calidad(){
+		return calidad
+	}
+}
+
+object uni{
+	var calidad = 100
+	var mistico = true
+	
+	method esMistico(){
+		return mistico 
+	}
+		
+	method calidad(){
+		return calidad
+	}
 }

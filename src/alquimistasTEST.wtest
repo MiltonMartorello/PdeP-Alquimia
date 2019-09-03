@@ -1,0 +1,27 @@
+import alquimistas.*
+
+//Ejercicio 1
+
+test "Un alquimista tiene criterio. Se cumple si la mitad de sus items de combate son efectivos" {
+
+	assert.that(alquimista.tieneCriterio())
+	
+}
+
+test "Un alquimista NO tiene criterio. Si la mitad de sus items de combate no son efectivos" {
+
+	assert.notThat(alquimista.tieneCriterio())
+	
+}
+
+//Ejercicio 2
+
+test "Un alquimista es buen explorador si posee al menos 3 items de recoleccion distintos" {
+	
+	assert.that(alquimista.esBuenExplorador())
+}
+
+test "Un alquimista NO es buen explorador si posee menos de 3 items de recoleccion distintos" {
+	
+	assert.that(alquimista.esBuenExplorador())
+}
